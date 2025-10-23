@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple Presentation Gallery</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      background: #f3f3f3;
+    }
+
+    header {
+      background: #222;
+      color: #fff;
+      text-align: center;
+      padding: 20px 0;
+      font-size: 1.5rem;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    .gallery {
+      position: relative;
+      width: 80%;
+      max-width: 700px;
+      height: 400px;
+      overflow: hidden;
+      border-radius: 15px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+      background: #000; /* dark background for letterboxing when images don't fill */
+    }
+
+    .gallery img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain; /* make the whole image visible and fit inside */
+      object-position: center;
+      display: none;
+      border-radius: 15px;
+    }
+
+    .gallery img.active {
+      display: block;
+      animation: fade 0.6s ease;
+    }
+
+    @keyframes fade {
+      from { opacity: 0.3; }
+      to { opacity: 1; }
+    }
+
+    .buttons {
+      margin-top: 20px;
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    button {
+      background: #222;
+      color: #fff;
+      border: none;
+      padding: 10px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.08s;
+      font-size: 1rem;
+    }
+
+    button:hover { background: #444; transform: translateY(-1px); }
+
+    /* active pager button */
+    .buttons button.active {
+      background: #0a84ff;
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(10,132,255,0.25);
+    }
+
+    footer {
+      background: #222;
+      color: #fff;
+      text-align: center;
+      padding: 15px 0;
+      font-size: 0.9rem;
+      letter-spacing: 1px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    BLUE SKY ENERGY LTD PRESENTATION
+  </header>
+
+  <main>
+    <div class="gallery">
+      <img src="office.jpeg" class="active" alt="Image 1">
+      <img src="reception.jpeg" alt="Image 2" >
+      <img src="workstation.jpeg" alt="Image 3">
+    </div>
+
+    <div class="buttons" id="pager">
+      <!-- numeric pager buttons will be generated here -->
+    </div>
+  </main>
+
+  <footer>
+    © 2025 Mike Productions | All Rights Reserved
+  </footer>
+
+  <script>
+    const images = document.querySelectorAll('.gallery img');
+    const pager = document.getElementById('pager');
+    let currentIndex = Array.from(images).findIndex(img => img.classList.contains('active'));
+    if (currentIndex === -1) currentIndex = 0;
+
+    // ensure DOM reflects initial active image
+    images.forEach((img, i) => {
+      if (i === currentIndex) img.classList.add('active');
+      else img.classList.remove('active');
+    });
+
+    // create numbered pager buttons
+    images.forEach((_, i) => {
+      const btn = document.createElement('button');
+      btn.textContent = (i + 1);
+      if (i === currentIndex) btn.classList.add('active');
+      btn.addEventListener('click', () => {
+        // swap active image
+        images[currentIndex].classList.remove('active');
+        pager.children[currentIndex].classList.remove('active');
+        currentIndex = i;
+        images[currentIndex].classList.add('active');
+        pager.children[currentIndex].classList.add('active');
+      });
+      pager.appendChild(btn);
+    });
+  </script>
+
+</body>
+</html>
